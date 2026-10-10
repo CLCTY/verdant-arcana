@@ -5,12 +5,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models.dart';
+import 'localization.dart';
 
 enum AiProvider { deepseek, opencode }
 
 extension AiProviderInfo on AiProvider {
   String get label =>
-      this == AiProvider.deepseek ? 'DeepSeek 官方' : 'OpenCode Go';
+      tr(this == AiProvider.deepseek ? 'DeepSeek 官方' : 'OpenCode Go');
   String get endpoint => this == AiProvider.deepseek
       ? 'https://api.deepseek.com/chat/completions'
       : 'https://opencode.ai/zen/go/v1/chat/completions';
@@ -109,7 +110,7 @@ class AiService {
               if (provider == AiProvider.opencode)
                 'x-opencode-session': 'emerald-tarot-$session',
               // Browser user agents are browser-controlled; never impersonate a coding agent.
-              if (!kIsWeb) 'User-Agent': 'VerdantArcana/0.2',
+              if (!kIsWeb) 'User-Agent': 'VerdantArcana/0.3',
             },
             body: jsonEncode({
               'model': model,
@@ -121,7 +122,11 @@ class AiService {
                   'role': 'system',
                   'content': test
                       ? 'Reply with OK.'
-                      : '你是温和、严谨的中文塔罗解读助手。将塔罗作为自我反思工具，不把象征解释成确定预言。结合实际问题、牌阵位置、正逆位与多张牌的关系，给出具体且可执行的小行动。不要声称能知道他人的真实内心。不得输出内部思考过程。使用清晰的短段落，约500至800字。',
+                      : 'You are a compassionate, grounded tarot reflection assistant. Treat symbols as prompts for reflection, never certain predictions. Connect the question, spread positions, card orientations and relationships between cards. Suggest one to three practical small actions. Do not claim to know another person\'s inner thoughts. Do not output internal reasoning. Use short clear paragraphs. Respond exclusively in ${switch (appPreferences.language) {
+                          'ja' => 'Japanese',
+                          'en' => 'English',
+                          _ => 'Simplified Chinese',
+                        }}.',
                 },
                 {'role': 'user', 'content': prompt},
               ],

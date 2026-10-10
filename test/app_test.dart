@@ -103,7 +103,7 @@ void main() {
       await t.tap(save);
       await t.pumpAndSettle();
       expect(journal.readings.single.note, '今天先完成一个小行动。');
-      await t.tap(find.byTooltip('Back'));
+      await t.tap(find.byType(BackButton));
       await t.pumpAndSettle();
       await t.tap(find.text('日记').last);
       await t.pumpAndSettle();

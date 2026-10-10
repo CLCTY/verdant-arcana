@@ -1,3 +1,4 @@
+import 'localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'ai.dart';
@@ -6,54 +7,94 @@ class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('设置')),
+    appBar: AppBar(title: Text(translateUi('设置', context))),
     body: ListView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       children: [
-        Text('让指引更贴近你', style: Theme.of(context).textTheme.headlineSmall),
-        const SizedBox(height: 24),
+        Text(
+          translateUi('让指引更贴近你', context),
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        SizedBox(height: 24),
         ListenableBuilder(
           listenable: aiSettings,
           builder: (context, _) => Card.filled(
             child: ListTile(
-              leading: const Icon(Icons.auto_awesome_outlined),
-              title: const Text('AI 接入'),
+              leading: Icon(Icons.auto_awesome_outlined),
+              title: Text(translateUi('AI 接入', context)),
               subtitle: Text(
-                aiSettings.ready
-                    ? '${aiSettings.provider.label} · ${aiSettings.modelFor(aiSettings.provider)}'
-                    : '连接 DeepSeek 官方或 OpenCode Go',
+                translateUi(
+                  aiSettings.ready
+                      ? '${aiSettings.provider.label} · ${aiSettings.modelFor(aiSettings.provider)}'
+                      : '连接 DeepSeek 官方或 OpenCode Go',
+                  context,
+                ),
               ),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: Icon(Icons.chevron_right),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(builder: (_) => const AiSettingsPage()),
               ),
             ),
           ),
         ),
-        const SizedBox(height: 24),
-        Text('外观与内容', style: Theme.of(context).textTheme.titleMedium),
-        const ListTile(
+        SizedBox(height: 24),
+        Text(
+          translateUi('外观与内容', context),
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        SizedBox(height: 16),
+        DropdownMenu<String>(
+          key: ValueKey('language-${appPreferences.language}'),
+          initialSelection: appPreferences.language,
+          expandedInsets: EdgeInsets.zero,
+          label: Text(translateUi('语言', context)),
+          dropdownMenuEntries: const [
+            DropdownMenuEntry(value: 'zh', label: '简体中文'),
+            DropdownMenuEntry(value: 'en', label: 'English'),
+            DropdownMenuEntry(value: 'ja', label: '日本語'),
+          ],
+          onSelected: (value) async {
+            if (value == null) return;
+            try {
+              await appPreferences.setLanguage(value);
+            } catch (_) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(tr('保存失败，请重试。', context))),
+                );
+              }
+            }
+          },
+        ),
+        SizedBox(height: 16),
+        ListTile(
           contentPadding: EdgeInsets.zero,
           leading: Icon(Icons.dark_mode_outlined),
-          title: Text('深色外观'),
-          subtitle: Text('翡翠绿 · 玫瑰金'),
+          title: Text(translateUi('OLED 纯黑背景', context)),
+          subtitle: Text(translateUi('跟随系统壁纸配色', context)),
           trailing: Icon(Icons.check),
         ),
-        const ListTile(
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(Icons.palette_outlined),
+          title: Text(tr('动态取色', context)),
+          subtitle: Text(tr('支持的设备跟随壁纸或系统强调色，不支持时使用默认翡翠配色。', context)),
+        ),
+        ListTile(
           contentPadding: EdgeInsets.zero,
           leading: Icon(Icons.style_outlined),
-          title: Text('完整塔罗牌库'),
-          subtitle: Text('22 张大阿卡纳 · 56 张小阿卡纳'),
+          title: Text(translateUi('完整塔罗牌库', context)),
+          subtitle: Text(translateUi('22 张大阿卡纳 · 56 张小阿卡纳', context)),
         ),
-        const ListTile(
+        ListTile(
           contentPadding: EdgeInsets.zero,
           leading: Icon(Icons.lock_outline),
-          title: Text('私人日记'),
-          subtitle: Text('保存在当前设备。长按记录可选择删除。'),
+          title: Text(translateUi('私人日记', context)),
+          subtitle: Text(translateUi('保存在当前设备。长按记录可选择删除。', context)),
         ),
-        const Divider(),
-        const SizedBox(height: 16),
-        const Text('卡牌提供思考的视角，选择始终由你自己做出。'),
+        Divider(),
+        SizedBox(height: 16),
+        Text(translateUi('卡牌提供思考的视角，选择始终由你自己做出。', context)),
       ],
     ),
   );
@@ -132,20 +173,26 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('AI 接入')),
+    appBar: AppBar(title: Text(translateUi('AI 接入', context))),
     body: ListView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       children: [
-        Text('选择解读服务', style: Theme.of(context).textTheme.headlineSmall),
-        const SizedBox(height: 12),
-        const Text('保存配置后，在牌阵解读中点击「AI 深入解读」。'),
-        const SizedBox(height: 24),
+        Text(
+          translateUi('选择解读服务', context),
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        SizedBox(height: 12),
+        Text(translateUi('保存配置后，在牌阵解读中点击「AI 深入解读」。', context)),
+        SizedBox(height: 24),
         SegmentedButton<AiProvider>(
-          segments: const [
-            ButtonSegment(value: AiProvider.deepseek, label: Text('DeepSeek')),
+          segments: [
+            ButtonSegment(
+              value: AiProvider.deepseek,
+              label: Text(translateUi('DeepSeek', context)),
+            ),
             ButtonSegment(
               value: AiProvider.opencode,
-              label: Text('OpenCode Go'),
+              label: Text(translateUi('OpenCode Go', context)),
             ),
           ],
           selected: {provider},
@@ -158,12 +205,12 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
                   status = null;
                 }),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         DropdownMenu<String>(
           key: ValueKey(provider),
           expandedInsets: EdgeInsets.zero,
           initialSelection: model,
-          label: const Text('模型'),
+          label: Text(translateUi('模型', context)),
           enabled: !busy,
           dropdownMenuEntries: provider.models
               .map((m) => DropdownMenuEntry(value: m, label: m))
@@ -172,19 +219,19 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
             if (m != null) setState(() => model = m);
           },
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         TextField(
-          key: const ValueKey('api-key'),
+          key: ValueKey('api-key'),
           controller: keyInput,
           enabled: !busy,
           obscureText: obscure,
           autocorrect: false,
           enableSuggestions: false,
           decoration: InputDecoration(
-            labelText: 'API Key',
-            hintText: '输入 ${provider.label} 的密钥',
+            labelText: translateUi('API Key', context),
+            hintText: translateUi('输入 ${provider.label} 的密钥', context),
             suffixIcon: IconButton(
-              tooltip: obscure ? '显示密钥' : '隐藏密钥',
+              tooltip: translateUi(obscure ? '显示密钥' : '隐藏密钥', context),
               onPressed: () => setState(() => obscure = !obscure),
               icon: Icon(
                 obscure
@@ -194,68 +241,74 @@ class _AiSettingsPageState extends State<AiSettingsPage> {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         Text(
-          kIsWeb ? 'Web 预览的密钥仅保留到页面刷新。手机端使用系统安全存储。' : '密钥保存在系统安全存储中，各服务独立保存。',
+          translateUi(
+            kIsWeb ? 'Web 预览的密钥仅保留到页面刷新。手机端使用系统安全存储。' : '密钥保存在系统安全存储中，各服务独立保存。',
+            context,
+          ),
           style: Theme.of(context).textTheme.bodySmall,
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         Card.filled(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  provider.label,
+                  translateUi(provider.label, context),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 SelectableText(
-                  provider.endpoint,
+                  translateUi(provider.endpoint, context),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 if (provider == AiProvider.opencode) ...[
-                  const SizedBox(height: 12),
-                  const Text(
-                    'OpenCode Go 主要面向编程代理请求。塔罗用途是否允许及可用，需以服务方规则和账户权限为准。',
+                  SizedBox(height: 12),
+                  Text(
+                    translateUi(
+                      'OpenCode Go 主要面向编程代理请求。塔罗用途是否允许及可用，需以服务方规则和账户权限为准。',
+                      context,
+                    ),
                   ),
                 ],
-                const SizedBox(height: 12),
-                const Text('AI 解读仅发送当前问题、牌阵和牌面。日记感受不会发送。'),
+                SizedBox(height: 12),
+                Text(translateUi('AI 解读仅发送当前问题、牌阵和牌面。日记感受不会发送。', context)),
               ],
             ),
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         FilledButton.icon(
-          key: const ValueKey('save-ai'),
+          key: ValueKey('save-ai'),
           onPressed: busy ? null : () => save(),
-          icon: const Icon(Icons.check),
-          label: const Text('保存配置'),
+          icon: Icon(Icons.check),
+          label: Text(translateUi('保存配置', context)),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         OutlinedButton.icon(
-          key: const ValueKey('test-ai'),
+          key: ValueKey('test-ai'),
           onPressed: busy ? null : () => save(test: true),
-          icon: const Icon(Icons.wifi_tethering),
-          label: const Text('测试连接并保存'),
+          icon: Icon(Icons.wifi_tethering),
+          label: Text(translateUi('测试连接并保存', context)),
         ),
-        const SizedBox(height: 8),
-        const Text('测试会向所选服务发送一条简短请求。'),
-        if (busy) ...[
-          const SizedBox(height: 16),
-          const LinearProgressIndicator(),
-        ],
+        SizedBox(height: 8),
+        Text(translateUi('测试会向所选服务发送一条简短请求。', context)),
+        if (busy) ...[SizedBox(height: 16), LinearProgressIndicator()],
         if (status != null) ...[
-          const SizedBox(height: 16),
-          Semantics(liveRegion: true, child: Text(status!)),
+          SizedBox(height: 16),
+          Semantics(
+            liveRegion: true,
+            child: Text(translateUi(status!, context)),
+          ),
         ],
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         TextButton.icon(
           onPressed: busy ? null : () => save(clear: true),
-          icon: const Icon(Icons.key_off_outlined),
-          label: const Text('移除当前服务的密钥'),
+          icon: Icon(Icons.key_off_outlined),
+          label: Text(translateUi('移除当前服务的密钥', context)),
         ),
       ],
     ),

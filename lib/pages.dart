@@ -1,3 +1,4 @@
+import 'localization.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,10 +31,10 @@ class _DrawPageState extends State<DrawPage> {
               width: 170,
               child: SpreadDiagram(spread: spreadById(widget.reading.spreadId)),
             ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           GridView.builder(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
             itemCount: widget.reading.cards.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: columns,
@@ -55,19 +56,28 @@ class _DrawPageState extends State<DrawPage> {
                     setState(() => revealed.add(i));
                   },
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 Text(
-                  '${i + 1}. ${widget.reading.positions[i]}',
+                  translateUi(
+                    '${i + 1}. ${widget.reading.positions[i]}',
+                    context,
+                  ),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: muted, fontSize: 12),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Text(
-                  revealed.contains(i)
-                      ? widget.reading.cards[i].card.name
-                      : '轻触展开',
+                  translateUi(
+                    revealed.contains(i)
+                        ? widget.reading.cards[i].card.name
+                        : '轻触展开',
+                    context,
+                  ),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 14),
+                  style: TextStyle(fontSize: 14),
                 ),
               ],
             ),
@@ -77,45 +87,56 @@ class _DrawPageState extends State<DrawPage> {
     },
   );
   @override
-  Widget build(BuildContext c) => Scaffold(
-    appBar: AppBar(title: Text(widget.reading.spread)),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: Text(translateUi(widget.reading.spread, context))),
     body: SafeArea(
       child: ListView(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         children: [
           Text(
-            widget.reading.question,
+            widget.reading.id.startsWith('daily-')
+                ? tr(widget.reading.question, context)
+                : widget.reading.question,
             textAlign: TextAlign.center,
-            style: Theme.of(c).textTheme.titleLarge?.copyWith(height: 1.5),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(height: 1.5),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           Text(
-            revealed.length == widget.reading.cards.length
-                ? '牌面已展开，听听它们的故事。'
-                : '深呼吸，点击牌背，让牌面慢慢展开。',
+            translateUi(
+              revealed.length == widget.reading.cards.length
+                  ? '牌面已展开，听听它们的故事。'
+                  : '深呼吸，点击牌背，让牌面慢慢展开。',
+              context,
+            ),
             textAlign: TextAlign.center,
-            style: const TextStyle(color: muted),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
-          const SizedBox(height: 26),
+          SizedBox(height: 26),
           LinearProgressIndicator(
             value: revealed.length / widget.reading.cards.length,
             minHeight: 4,
             borderRadius: BorderRadius.circular(4),
           ),
-          const SizedBox(height: 36),
+          SizedBox(height: 36),
           AnimatedSwitcher(
             duration: motion,
             child: shuffling
-                ? const SizedBox(
+                ? SizedBox(
                     height: 240,
                     child: Center(
-                      child: CircularProgressIndicator(semanticsLabel: '正在洗牌'),
+                      child: CircularProgressIndicator(
+                        semanticsLabel: translateUi('正在洗牌', context),
+                      ),
                     ),
                   )
                 : widget.reading.cards.length > 3
                 ? KeyedSubtree(
                     key: ValueKey(shuffleKey),
-                    child: expandedSpread(c),
+                    child: expandedSpread(context),
                   )
                 : Row(
                     key: ValueKey(shuffleKey),
@@ -144,21 +165,29 @@ class _DrawPageState extends State<DrawPage> {
                                   setState(() => revealed.add(i));
                                 },
                               ),
-                              const SizedBox(height: 14),
+                              SizedBox(height: 14),
                               Text(
-                                widget.reading.positions[i],
-                                style: const TextStyle(
-                                  color: muted,
+                                translateUi(
+                                  widget.reading.positions[i],
+                                  context,
+                                ),
+                                style: TextStyle(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                   fontSize: 12,
                                 ),
                               ),
-                              const SizedBox(height: 6),
+                              SizedBox(height: 6),
                               AnimatedSwitcher(
                                 duration: motion,
                                 child: Text(
-                                  revealed.contains(i)
-                                      ? widget.reading.cards[i].card.name
-                                      : '轻触展开',
+                                  translateUi(
+                                    revealed.contains(i)
+                                        ? widget.reading.cards[i].card.name
+                                        : '轻触展开',
+                                    context,
+                                  ),
                                   key: ValueKey(revealed.contains(i)),
                                 ),
                               ),
@@ -169,18 +198,23 @@ class _DrawPageState extends State<DrawPage> {
                     ),
                   ),
           ),
-          const SizedBox(height: 36),
+          SizedBox(height: 36),
           Text(
-            '${revealed.length} / ${widget.reading.cards.length} 张已展开',
+            translateUi(
+              '${revealed.length} / ${widget.reading.cards.length} 张已展开',
+              context,
+            ),
             textAlign: TextAlign.center,
-            style: const TextStyle(color: muted),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           FilledButton.icon(
-            key: const ValueKey('view-reading'),
+            key: ValueKey('view-reading'),
             onPressed:
                 revealed.length == widget.reading.cards.length && !shuffling
-                ? () => Navigator.of(c).pushReplacement(
+                ? () => Navigator.of(context).pushReplacement(
                     MaterialPageRoute<void>(
                       builder: (_) => ReadingPage(
                         reading: widget.reading,
@@ -189,19 +223,17 @@ class _DrawPageState extends State<DrawPage> {
                     ),
                   )
                 : null,
-            icon: const Icon(Icons.auto_awesome),
-            label: const Text('查看解读'),
+            icon: Icon(Icons.auto_awesome),
+            label: Text(translateUi('查看解读', context)),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           TextButton.icon(
             onPressed: revealed.isNotEmpty || shuffling
                 ? null
                 : () async {
                     HapticFeedback.selectionClick();
                     setState(() => shuffling = true);
-                    await Future<void>.delayed(
-                      const Duration(milliseconds: 650),
-                    );
+                    await Future<void>.delayed(Duration(milliseconds: 650));
                     if (!mounted) {
                       return;
                     }
@@ -217,8 +249,8 @@ class _DrawPageState extends State<DrawPage> {
                       shuffleKey++;
                     });
                   },
-            icon: const Icon(Icons.shuffle),
-            label: const Text('重新洗牌'),
+            icon: Icon(Icons.shuffle),
+            label: Text(translateUi('重新洗牌', context)),
           ),
         ],
       ),
@@ -239,18 +271,18 @@ class FlipCard extends StatelessWidget {
   final int index;
   final VoidCallback onTap;
   @override
-  Widget build(BuildContext c) => Semantics(
+  Widget build(BuildContext context) => Semantics(
     button: true,
     label: revealed
         ? '${drawn.card.name}，${drawn.orientation}'
-        : '展开第${index + 1}张牌',
+        : tr('展开第${index + 1}张牌', context),
     child: TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: revealed ? 1 : 0),
-      duration: reducedMotion(c)
+      duration: reducedMotion(context)
           ? Duration.zero
-          : const Duration(milliseconds: 700),
+          : Duration(milliseconds: 700),
       curve: Curves.easeInOutCubic,
-      builder: (c, value, _) {
+      builder: (context, value, _) {
         final front = value >= .5,
             angle = value >= .5 ? (1 - value) * pi : value * pi;
         return Transform(
@@ -320,8 +352,8 @@ class _ReadingPageState extends State<ReadingPage> {
         saving = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('已保存到日记'),
+        SnackBar(
+          content: Text(translateUi('已保存到日记', context)),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -330,31 +362,39 @@ class _ReadingPageState extends State<ReadingPage> {
         return;
       }
       setState(() => saving = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('保存失败，请重试。')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(translateUi('保存失败，请重试。', context))),
+      );
     }
   }
 
   @override
-  Widget build(BuildContext c) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: Text(widget.reading.spread == '每日一牌' ? '今日指引' : '牌阵解读'),
+      title: Text(
+        translateUi(widget.reading.spread == '每日一牌' ? '今日指引' : '牌阵解读', context),
+      ),
     ),
     body: SafeArea(
       child: ListView(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         children: [
           Text(
-            shortDate(widget.reading.created),
-            style: const TextStyle(color: muted),
+            translateUi(shortDate(widget.reading.created), context),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Text(
-            widget.reading.question,
-            style: Theme.of(c).textTheme.headlineSmall?.copyWith(height: 1.5),
+            widget.reading.id.startsWith('daily-')
+                ? tr(widget.reading.question, context)
+                : widget.reading.question,
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(height: 1.5),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           ...List.generate(widget.reading.cards.length, (i) {
             final drawn = widget.reading.cards[i];
             return Column(
@@ -370,7 +410,7 @@ class _ReadingPageState extends State<ReadingPage> {
                         heroTag: widget.reading.spread == '每日一牌'
                             ? 'daily-card'
                             : null,
-                        onTap: () => Navigator.of(c).push(
+                        onTap: () => Navigator.of(context).push(
                           MaterialPageRoute<void>(
                             builder: (_) => CardPage(card: drawn.card),
                           ),
@@ -386,64 +426,81 @@ class _ReadingPageState extends State<ReadingPage> {
                         child: CardArt(
                           card: drawn.card,
                           reversed: drawn.reversed,
-                          onTap: () => Navigator.of(c).push(
+                          onTap: () => Navigator.of(context).push(
                             MaterialPageRoute<void>(
                               builder: (_) => CardPage(card: drawn.card),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 20),
+                      SizedBox(width: 20),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.reading.positions[i],
-                              style: const TextStyle(color: rose),
+                              translateUi(widget.reading.positions[i], context),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8),
                             Text(
-                              '${drawn.card.name} · ${drawn.orientation}',
-                              style: Theme.of(c).textTheme.titleLarge,
+                              translateUi(
+                                '${drawn.card.name} · ${drawn.orientation}',
+                                context,
+                              ),
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8),
                             Text(
-                              drawn.card.keywords.join(' · '),
-                              style: const TextStyle(color: muted),
+                              translateUi(
+                                drawn.card.keywords.join(' · '),
+                                context,
+                              ),
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 if (widget.reading.cards.length == 1) ...[
                   Center(
                     child: Text(
-                      '${drawn.card.name} · ${drawn.orientation}',
-                      style: Theme.of(c).textTheme.headlineSmall,
+                      translateUi(
+                        '${drawn.card.name} · ${drawn.orientation}',
+                        context,
+                      ),
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Center(
                     child: Wrap(
                       spacing: 8,
                       children: drawn.card.keywords
-                          .map((w) => Chip(label: Text(w)))
+                          .map(
+                            (w) => Chip(label: Text(translateUi(w, context))),
+                          )
                           .toList(),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                 ],
                 Text(
-                  drawn.meaning,
-                  style: const TextStyle(fontSize: 16, height: 1.9),
+                  translateUi(drawn.meaning, context),
+                  style: TextStyle(fontSize: 16, height: 1.9),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 if (widget.reading.cards.length > 1) ...[
-                  const Divider(),
-                  const SizedBox(height: 16),
+                  Divider(),
+                  SizedBox(height: 16),
                 ],
               ],
             );
@@ -451,39 +508,48 @@ class _ReadingPageState extends State<ReadingPage> {
           Card.filled(
             margin: EdgeInsets.zero,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.lightbulb_outline, color: rose),
-                      const SizedBox(width: 10),
+                      Icon(
+                        Icons.lightbulb_outline,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      SizedBox(width: 10),
                       Text(
-                        '给自己的一个问题',
-                        style: Theme.of(c).textTheme.titleMedium,
+                        translateUi('给自己的一个问题', context),
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Text(
-                    widget.reading.cards.last.card.reflection,
-                    style: const TextStyle(height: 1.8),
+                    translateUi(
+                      widget.reading.cards.last.card.reflection,
+                      context,
+                    ),
+                    style: TextStyle(height: 1.8),
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 28),
+          SizedBox(height: 28),
           AiReadingPanel(
             reading: widget.reading,
             onChanged: () => setState(() => saved = false),
           ),
-          const SizedBox(height: 28),
-          Text('此刻的感受', style: Theme.of(c).textTheme.titleLarge),
-          const SizedBox(height: 12),
+          SizedBox(height: 28),
+          Text(
+            translateUi('此刻的感受', context),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          SizedBox(height: 12),
           TextField(
-            key: const ValueKey('journal-note'),
+            key: ValueKey('journal-note'),
             controller: note,
             minLines: 3,
             maxLines: 6,
@@ -493,16 +559,18 @@ class _ReadingPageState extends State<ReadingPage> {
                 setState(() => saved = false);
               }
             },
-            decoration: const InputDecoration(hintText: '写下你看见的、感受到的…'),
+            decoration: InputDecoration(
+              hintText: translateUi('写下你看见的、感受到的…', context),
+            ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           FilledButton.icon(
-            key: const ValueKey('save-journal'),
+            key: ValueKey('save-journal'),
             onPressed: saving ? null : save,
             icon: AnimatedSwitcher(
               duration: motion,
               child: saving
-                  ? const SizedBox(
+                  ? SizedBox(
                       key: ValueKey('loading'),
                       width: 20,
                       height: 20,
@@ -513,13 +581,17 @@ class _ReadingPageState extends State<ReadingPage> {
                       key: ValueKey(saved),
                     ),
             ),
-            label: Text(saved ? '已保存到日记' : '保存到日记'),
+            label: Text(translateUi(saved ? '已保存到日记' : '保存到日记', context)),
           ),
-          const SizedBox(height: 16),
-          const Text(
-            '解读是一种思考的视角，行动与选择仍然属于你。',
+          SizedBox(height: 16),
+          Text(
+            translateUi('解读是一种思考的视角，行动与选择仍然属于你。', context),
             textAlign: TextAlign.center,
-            style: TextStyle(color: muted, fontSize: 12, height: 1.7),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 12,
+              height: 1.7,
+            ),
           ),
         ],
       ),
@@ -538,7 +610,7 @@ class _LibraryPageState extends State<LibraryPage> {
   String query = '';
   String category = '全部';
   @override
-  Widget build(BuildContext c) {
+  Widget build(BuildContext context) {
     final cards = deck
         .where(
           (card) =>
@@ -549,33 +621,41 @@ class _LibraryPageState extends State<LibraryPage> {
         )
         .toList();
     return ListView(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24),
       children: [
-        Text('认识每一张牌', style: Theme.of(c).textTheme.headlineSmall),
-        const SizedBox(height: 8),
-        const Text('从象征出发，找到属于你的理解。', style: TextStyle(color: muted)),
-        const SizedBox(height: 24),
+        Text(
+          translateUi('认识每一张牌', context),
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        SizedBox(height: 8),
+        Text(
+          translateUi('从象征出发，找到属于你的理解。', context),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+        SizedBox(height: 24),
         SearchBar(
-          key: const ValueKey('card-search'),
-          hintText: '搜索牌名或关键词',
-          leading: const Icon(Icons.search),
+          key: ValueKey('card-search'),
+          hintText: translateUi('搜索牌名或关键词', context),
+          leading: Icon(Icons.search),
           onChanged: (v) => setState(() => query = v),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24),
         Text(
-          '$category · ${cards.length} 张',
-          style: Theme.of(c).textTheme.titleMedium,
+          translateUi('$category · ${cards.length} 张', context),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: ['全部', '大阿卡纳', '权杖', '圣杯', '宝剑', '星币']
                 .map(
                   (label) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: EdgeInsets.only(right: 8),
                     child: FilterChip(
-                      label: Text(label),
+                      label: Text(translateUi(label, context)),
                       selected: category == label,
                       onSelected: (_) => setState(() => category = label),
                     ),
@@ -584,25 +664,25 @@ class _LibraryPageState extends State<LibraryPage> {
                 .toList(),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         AnimatedSwitcher(
           duration: motion,
           child: cards.isEmpty
-              ? const Padding(
+              ? Padding(
                   key: ValueKey('empty'),
                   padding: EdgeInsets.all(32),
-                  child: Text('没有找到这张牌，试试其他关键词。'),
+                  child: Text(translateUi('没有找到这张牌，试试其他关键词。', context)),
                 )
               : LayoutBuilder(
-                  builder: (c, box) {
-                    final scaler = MediaQuery.textScalerOf(c);
+                  builder: (context, box) {
+                    final scaler = MediaQuery.textScalerOf(context);
                     final columns = scaler.scale(16) > 21 ? 1 : 2;
                     final cardWidth =
                         (box.maxWidth - (columns - 1) * 16) / columns;
                     return GridView.builder(
-                      key: ValueKey(cards.map((c) => c.id).join()),
+                      key: ValueKey(cards.map((context) => context.id).join()),
                       shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: cards.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: columns,
@@ -611,7 +691,7 @@ class _LibraryPageState extends State<LibraryPage> {
                         mainAxisExtent:
                             cardWidth / (936 / 1681) + 14 + scaler.scale(80),
                       ),
-                      itemBuilder: (c, i) => Column(
+                      itemBuilder: (context, i) => Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CardArt(
@@ -619,15 +699,23 @@ class _LibraryPageState extends State<LibraryPage> {
                             heroTag: 'library-${cards[i].id}',
                             onTap: () => widget.onOpen(cards[i]),
                           ),
-                          const SizedBox(height: 10),
+                          SizedBox(height: 10),
                           Text(
-                            '${cards[i].number}  ${cards[i].name}',
-                            style: Theme.of(c).textTheme.titleMedium,
+                            translateUi(
+                              '${cards[i].number}  ${cards[i].name}',
+                              context,
+                            ),
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           Text(
-                            cards[i].keywords.join(' · '),
-                            style: const TextStyle(color: muted, fontSize: 11),
+                            translateUi(cards[i].keywords.join(' · '), context),
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                              fontSize: 11,
+                            ),
                           ),
                         ],
                       ),
@@ -650,18 +738,18 @@ class CardPage extends StatefulWidget {
 class _CardPageState extends State<CardPage> {
   bool reversed = false;
   @override
-  Widget build(BuildContext c) => Scaffold(
-    appBar: AppBar(title: Text(widget.card.name)),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: Text(translateUi(widget.card.name, context))),
     body: SafeArea(
       child: ListView(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         children: [
           Center(
             child: SizedBox(
               width: 200,
               child: AnimatedRotation(
                 turns: reversed ? .5 : 0,
-                duration: reducedMotion(c) ? Duration.zero : motion,
+                duration: reducedMotion(context) ? Duration.zero : motion,
                 curve: Curves.easeInOutCubic,
                 child: CardArt(
                   card: widget.card,
@@ -670,18 +758,27 @@ class _CardPageState extends State<CardPage> {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           Center(
             child: Text(
-              widget.card.english,
-              style: const TextStyle(color: rose, letterSpacing: 2),
+              translateUi(widget.card.english, context),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                letterSpacing: 2,
+              ),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           SegmentedButton<bool>(
-            segments: const [
-              ButtonSegment(value: false, label: Text('正位')),
-              ButtonSegment(value: true, label: Text('逆位')),
+            segments: [
+              ButtonSegment(
+                value: false,
+                label: Text(translateUi('正位', context)),
+              ),
+              ButtonSegment(
+                value: true,
+                label: Text(translateUi('逆位', context)),
+              ),
             ],
             selected: {reversed},
             onSelectionChanged: (v) {
@@ -689,30 +786,36 @@ class _CardPageState extends State<CardPage> {
               setState(() => reversed = v.first);
             },
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Wrap(
             spacing: 8,
             children: widget.card.keywords
-                .map((w) => Chip(label: Text(w)))
+                .map((w) => Chip(label: Text(translateUi(w, context))))
                 .toList(),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           AnimatedSize(
             duration: motion,
             alignment: Alignment.topCenter,
             child: AnimatedSwitcher(
               duration: motion,
               child: Text(
-                reversed ? widget.card.reverse : widget.card.meaning,
+                translateUi(
+                  reversed ? widget.card.reverse : widget.card.meaning,
+                  context,
+                ),
                 key: ValueKey(reversed),
-                style: const TextStyle(fontSize: 16, height: 1.9),
+                style: TextStyle(fontSize: 16, height: 1.9),
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           Text(
-            widget.card.reflection,
-            style: const TextStyle(color: rose, height: 1.8),
+            translateUi(widget.card.reflection, context),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              height: 1.8,
+            ),
           ),
         ],
       ),

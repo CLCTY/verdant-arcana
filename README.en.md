@@ -1,10 +1,20 @@
 # 翠启 · Verdant Arcana
 
-<img src="assets/branding/app-icon.png" width="96" alt="Verdant Arcana crescent and guiding star icon">
+<img src="assets/branding/app-icon.png" width="96" alt="Verdant Arcana tarot card fan icon">
 
 [中文](README.md) | English
 
-A dark Flutter tarot app in emerald green and rose gold, centered on a large daily card. The Chinese name **翠启** combines emerald with insight; **Verdant Arcana** connects the palette to tarot's arcana. Version 0.2.
+A dark Flutter tarot app with OLED black backgrounds and system dynamic colors, centered on a large daily card. The Chinese name **翠启** combines emerald with insight; **Verdant Arcana** connects the palette to tarot's arcana. Version 0.3.
+
+## What's new in 0.3
+
+- Pure `#000000` page backgrounds, app bars and startup surfaces. The bottom navigation uses dynamic `surfaceContainer`; other UI elements also use native MD3 color roles.
+- Material's `dynamic_color` provides Android 12+ wallpaper palettes and Windows system accent colors. Windows can derive its accent from wallpaper when that option is enabled in Windows settings. Unsupported platforms and the Web use an emerald fallback. Resuming the app refreshes the palette without resetting navigation or unfinished input.
+- Settings → Language offers Simplified Chinese, English and Japanese, with immediate updates and persistent selection. UI, native Material controls, card names, keywords, interpretations and spreads are localized. English and Japanese card interpretations use separate concise copy. User questions, journal text and existing AI readings retain their original language; new AI responses use the selected language.
+- A new three-card fan and geometric diamond icon.
+- 18 tests pass, including mocked system palette updates, state retention, language persistence and preservation of journal text. Real-device dynamic colors remain unverified.
+
+![OLED and multilingual interface](design/personalization-preview.png)
 
 ## Features
 
@@ -18,7 +28,7 @@ A dark Flutter tarot app in emerald green and rose gold, centered on a large dai
 - Official Flutter **Material 3** components, `useMaterial3: true`, dark mode only. No third-party M3E component package.
 - Ripple feedback, animated navigation and spread selection, page transitions, Hero transitions, 700 ms 3D card flips and orientation changes.
 
-The interface and card interpretations currently use Chinese. This English README documents the project; it does not imply an English interface translation.
+The interface supports Chinese, English and Japanese. The printed lettering inside card illustrations is part of the artwork and remains unchanged.
 
 ## AI configuration
 

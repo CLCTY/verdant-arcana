@@ -1,6 +1,9 @@
+import 'localization.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'models.dart';
 import 'pages.dart';
 import 'spreads.dart';
@@ -8,67 +11,56 @@ import 'settings.dart';
 import 'ai.dart';
 import 'journal.dart' as diary;
 
-const emerald = Color(0xFF0C2923),
-    rose = Color(0xFFD2AA8D),
-    ivory = Color(0xFFF3EDDD),
-    sage = Color(0xFFBFD5BE),
-    muted = Color(0xFF9EB5A6);
 const motion = Duration(milliseconds: 380);
-bool reducedMotion(BuildContext c) => MediaQuery.disableAnimationsOf(c);
-String shortDate(DateTime d) => '${d.month}月${d.day}日';
-String longDate(DateTime d) =>
-    '${shortDate(d)}  ${const ['周一', '周二', '周三', '周四', '周五', '周六', '周日'][d.weekday - 1]}';
+bool reducedMotion(BuildContext context) =>
+    MediaQuery.disableAnimationsOf(context);
+String shortDate(DateTime d) => localizedDate(d);
+String longDate(DateTime d) => localizedDate(d, weekday: true);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final journal = JournalStore();
   await journal.load();
   await aiSettings.load();
+  await appPreferences.load();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: Colors.black,
+      systemNavigationBarIconBrightness: Brightness.light,
+    ),
+  );
   runApp(TarotApp(journal: journal));
 }
 
-ThemeData tarotTheme() {
+ThemeData tarotTheme([ColorScheme? dynamicScheme]) {
   final scheme =
-      ColorScheme.fromSeed(
-        seedColor: const Color(0xFF417B60),
-        brightness: Brightness.dark,
-      ).copyWith(
-        primary: sage,
-        onPrimary: emerald,
-        primaryContainer: const Color(0xFF345E49),
-        onPrimaryContainer: ivory,
-        secondary: rose,
-        onSecondary: emerald,
-        secondaryContainer: const Color(0xFF345542),
-        onSecondaryContainer: ivory,
-        surface: emerald,
-        onSurface: ivory,
-        onSurfaceVariant: muted,
-        surfaceContainerLowest: const Color(0xFF08201B),
-        surfaceContainerLow: const Color(0xFF103027),
-        surfaceContainer: const Color(0xFF13362D),
-        surfaceContainerHigh: const Color(0xFF1C4135),
-        surfaceContainerHighest: const Color(0xFF294D3F),
-        outline: const Color(0xFF7A9485),
-        outlineVariant: const Color(0xFF355347),
-      );
+      (dynamicScheme ??
+              ColorScheme.fromSeed(
+                seedColor: const Color(0xFF417B60),
+                brightness: Brightness.dark,
+              ))
+          .copyWith(
+            surface: Colors.black,
+            surfaceContainerLowest: Colors.black,
+          );
   final base = ThemeData(
     useMaterial3: true,
     colorScheme: scheme,
-    fontFamily: 'NotoSansSC',
+    fontFamily: appPreferences.language == 'ja' ? null : 'NotoSansSC',
   );
   return base.copyWith(
-    scaffoldBackgroundColor: emerald,
-    textTheme: base.textTheme,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: emerald,
-      foregroundColor: ivory,
+    scaffoldBackgroundColor: Colors.black,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.black,
+      foregroundColor: scheme.onSurface,
       centerTitle: true,
       scrolledUnderElevation: 0,
     ),
-    navigationBarTheme: const NavigationBarThemeData(
-      backgroundColor: Color(0xFF13362D),
-      indicatorColor: Color(0xFF345E49),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: scheme.surfaceContainer,
+      indicatorColor: scheme.primaryContainer,
       height: 80,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
     ),
@@ -102,26 +94,62 @@ ThemeData tarotTheme() {
   );
 }
 
-class TarotApp extends StatelessWidget {
+class TarotApp extends StatefulWidget {
   const TarotApp({super.key, required this.journal});
   final JournalStore journal;
   @override
-  Widget build(BuildContext context) => MaterialApp(
-    title: '翠启 · Verdant Arcana',
-    debugShowCheckedModeBanner: false,
-    theme: tarotTheme(),
-    darkTheme: tarotTheme(),
-    themeMode: ThemeMode.dark,
-    builder: (context, child) => ColoredBox(
-      color: const Color(0xFF061C17),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 520),
-          child: child!,
+  State<TarotApp> createState() => _TarotAppState();
+}
+
+class _TarotAppState extends State<TarotApp> with WidgetsBindingObserver {
+  final paletteKey = GlobalKey<DynamicColorBuilderState>();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      paletteKey.currentState?.initPlatformState();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: appPreferences,
+    builder: (context, _) => DynamicColorBuilder(
+      key: paletteKey,
+      builder: (_, dark) => MaterialApp(
+        title: '翠启 · Verdant Arcana',
+        debugShowCheckedModeBanner: false,
+        locale: Locale(appPreferences.language),
+        supportedLocales: [Locale('zh'), Locale('en'), Locale('ja')],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
+        theme: tarotTheme(dark),
+        darkTheme: tarotTheme(dark),
+        themeMode: ThemeMode.dark,
+        builder: (context, child) => AppLocaleScope(
+          child: ColoredBox(
+            color: Colors.black,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 520),
+                child: child!,
+              ),
+            ),
+          ),
         ),
+        home: AppShell(journal: widget.journal),
       ),
     ),
-    home: AppShell(journal: journal),
   );
 }
 
@@ -144,7 +172,7 @@ class _AppShellState extends State<AppShell> {
     super.initState();
     final now = DateTime.now(), date = DateUtils.dateOnly(DateTime.now());
     final index =
-        (deck.indexWhere((c) => c.id == 'star') +
+        (deck.indexWhere((context) => context.id == 'star') +
             date.difference(DateTime(2026, 10, 10)).inDays) %
         deck.length;
     daily = Reading(
@@ -156,9 +184,11 @@ class _AppShellState extends State<AppShell> {
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.journal.loadError != null && mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(widget.journal.loadError!)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(translateUi(widget.journal.loadError!, context)),
+          ),
+        );
       }
     });
   }
@@ -196,11 +226,14 @@ class _AppShellState extends State<AppShell> {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text(const ['翠启', '占卜', '牌库', '日记'][selected]),
+        title: Text(translateUi(['翠启', '占卜', '牌库', '日记'][selected], context)),
         actions: [
           IconButton(
-            tooltip: '设置',
-            icon: const Icon(Icons.settings_outlined, color: rose),
+            tooltip: translateUi('设置', context),
+            icon: Icon(
+              Icons.settings_outlined,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
             onPressed: () => settings(context),
           ),
         ],
@@ -214,7 +247,7 @@ class _AppShellState extends State<AppShell> {
             opacity: animation,
             child: SlideTransition(
               position: Tween<Offset>(
-                begin: const Offset(0, .025),
+                begin: Offset(0, .025),
                 end: Offset.zero,
               ).animate(animation),
               child: child,
@@ -227,149 +260,171 @@ class _AppShellState extends State<AppShell> {
         selectedIndex: selected,
         onDestinationSelected: select,
         animationDuration: reducedMotion(context) ? Duration.zero : motion,
-        destinations: const [
+        destinations: [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
-            label: '今日',
+            label: translateUi('今日', context),
           ),
           NavigationDestination(
             icon: Icon(Icons.nights_stay_outlined),
             selectedIcon: Icon(Icons.nights_stay),
-            label: '占卜',
+            label: translateUi('占卜', context),
           ),
           NavigationDestination(
             icon: Icon(Icons.style_outlined),
             selectedIcon: Icon(Icons.style),
-            label: '牌库',
+            label: translateUi('牌库', context),
           ),
           NavigationDestination(
             icon: Icon(Icons.book_outlined),
             selectedIcon: Icon(Icons.book),
-            label: '日记',
+            label: translateUi('日记', context),
           ),
         ],
       ),
     );
   }
 
-  Widget home(BuildContext c) => LayoutBuilder(
-    builder: (c, box) => SingleChildScrollView(
-      key: const PageStorageKey('home'),
-      padding: const EdgeInsets.fromLTRB(24, 4, 24, 16),
+  Widget home(BuildContext context) => LayoutBuilder(
+    builder: (context, box) => SingleChildScrollView(
+      key: PageStorageKey('home'),
+      padding: EdgeInsets.fromLTRB(24, 4, 24, 16),
       child: Column(
         children: [
           Text(
-            longDate(DateTime.now()),
-            style: Theme.of(
-              c,
-            ).textTheme.labelLarge?.copyWith(color: muted, height: 1.4),
+            translateUi(longDate(DateTime.now()), context),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              height: 1.4,
+            ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           Text(
-            '今日，听见内心',
+            translateUi('今日，听见内心', context),
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'NotoSerifSC',
+            style: TextStyle(
+              fontFamily: appPreferences.language == 'ja'
+                  ? null
+                  : 'NotoSerifSC',
               fontSize: 28,
               height: 1.3,
               fontWeight: FontWeight.w600,
-              color: ivory,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 8),
-          const Text(
-            '留一点时间，给自己。',
-            style: TextStyle(color: muted, fontSize: 16, height: 1.4),
+          SizedBox(height: 8),
+          Text(
+            translateUi('留一点时间，给自己。', context),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 16,
+              height: 1.4,
+            ),
           ),
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           SizedBox(
             width: (box.maxHeight * .32).clamp(156.0, 198.0),
             child: CardArt(
               card: daily.cards.first.card,
               heroTag: 'daily-card',
-              label: '查看今日牌义',
+              label: translateUi('查看今日牌义', context),
               onTap: () => openReading(daily),
             ),
           ),
-          const SizedBox(height: 14),
-          const Chip(
-            label: Text('今日一牌'),
+          SizedBox(height: 14),
+          Chip(
+            label: Text(translateUi('今日一牌', context)),
             avatar: Icon(Icons.auto_awesome, size: 16),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           Text(
-            '${daily.cards.first.card.name} · 正位',
-            style: const TextStyle(
-              fontFamily: 'NotoSerifSC',
+            translateUi('${daily.cards.first.card.name} · 正位', context),
+            style: TextStyle(
+              fontFamily: appPreferences.language == 'ja'
+                  ? null
+                  : 'NotoSerifSC',
               fontSize: 24,
               height: 1.3,
-              color: ivory,
+              color: Theme.of(context).colorScheme.onSurface,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Text(
-            daily.cards.first.card.id == 'star'
-                ? '为新的可能，留一盏灯。'
-                : daily.cards.first.card.reflection,
+            translateUi(
+              daily.cards.first.card.id == 'star'
+                  ? '为新的可能，留一盏灯。'
+                  : daily.cards.first.card.reflection,
+              context,
+            ),
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, color: muted, height: 1.4),
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              height: 1.4,
+            ),
           ),
-          const SizedBox(height: 22),
+          SizedBox(height: 22),
           SizedBox(
             width: double.infinity,
             child: FilledButton(
-              key: const ValueKey('daily-reading'),
+              key: ValueKey('daily-reading'),
               onPressed: () => openReading(daily),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('查看今日指引'),
+                  Text(translateUi('查看今日指引', context)),
                   SizedBox(width: 12),
                   Icon(Icons.arrow_forward),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           TextButton(
             onPressed: () => select(1),
-            child: const Text(
-              '带着问题来？  开始一次占卜 →',
-              style: TextStyle(color: rose),
+            child: Text(
+              translateUi('带着问题来？  开始一次占卜 →', context),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
           ),
         ],
       ),
     ),
   );
-  Widget form(BuildContext c) => ListView(
-    padding: const EdgeInsets.all(24),
+  Widget form(BuildContext context) => ListView(
+    padding: EdgeInsets.all(24),
     children: [
-      Text('此刻，你想问什么？', style: Theme.of(c).textTheme.headlineSmall),
-      const SizedBox(height: 8),
-      const Text('把问题留在这里，让牌成为一次思考的开始。', style: TextStyle(color: muted)),
-      const SizedBox(height: 24),
+      Text(
+        translateUi('此刻，你想问什么？', context),
+        style: Theme.of(context).textTheme.headlineSmall,
+      ),
+      SizedBox(height: 8),
+      Text(
+        translateUi('把问题留在这里，让牌成为一次思考的开始。', context),
+        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+      ),
+      SizedBox(height: 24),
       TextField(
-        key: const ValueKey('question'),
+        key: ValueKey('question'),
         controller: question,
         maxLength: 200,
         minLines: 3,
         maxLines: 5,
-        decoration: const InputDecoration(
-          labelText: '你的问题',
-          hintText: '我可以怎样看待眼前的变化？',
+        decoration: InputDecoration(
+          labelText: translateUi('你的问题', context),
+          hintText: translateUi('我可以怎样看待眼前的变化？', context),
           alignLabelWithHint: true,
         ),
       ),
-      const SizedBox(height: 8),
+      SizedBox(height: 8),
       Wrap(
         spacing: 8,
         children: ['关系', '工作', '自我']
             .map(
               (t) => ChoiceChip(
-                label: Text(t),
+                label: Text(translateUi(t, context)),
                 selected: topic == t,
                 onSelected: (_) {
                   HapticFeedback.selectionClick();
@@ -379,9 +434,12 @@ class _AppShellState extends State<AppShell> {
             )
             .toList(),
       ),
-      const SizedBox(height: 28),
-      Text('选择牌阵', style: Theme.of(c).textTheme.titleLarge),
-      const SizedBox(height: 16),
+      SizedBox(height: 28),
+      Text(
+        translateUi('选择牌阵', context),
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      SizedBox(height: 16),
       SpreadPicker(
         selectedId: spreadId,
         onChanged: (s) {
@@ -389,50 +447,53 @@ class _AppShellState extends State<AppShell> {
           setState(() => spreadId = s.id);
         },
       ),
-      const SizedBox(height: 20),
+      SizedBox(height: 20),
       AnimatedSwitcher(
         duration: motion,
         child: Card.filled(
           key: ValueKey(spreadId),
           margin: EdgeInsets.zero,
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  spreadById(spreadId).name,
-                  style: Theme.of(c).textTheme.titleMedium,
+                  translateUi(spreadById(spreadId).name, context),
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 Text(
-                  spreadById(spreadId).description,
-                  style: const TextStyle(color: muted, height: 1.7),
+                  translateUi(spreadById(spreadId).description, context),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    height: 1.7,
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
-      const SizedBox(height: 32),
+      SizedBox(height: 32),
       FilledButton.icon(
-        key: const ValueKey('start-reading'),
-        icon: const Icon(Icons.auto_awesome),
-        label: const Text('开始占卜'),
+        key: ValueKey('start-reading'),
+        icon: Icon(Icons.auto_awesome),
+        label: Text(translateUi('开始占卜', context)),
         onPressed: () {
-          FocusScope.of(c).unfocus();
+          FocusScope.of(context).unfocus();
           final now = DateTime.now();
           final reading = Reading(
             id: 'reading-${now.microsecondsSinceEpoch}',
             created: now,
             question: question.text.trim().isEmpty
-                ? '关于$topic，我现在可以关注什么？'
+                ? tr('关于$topic，我现在可以关注什么？')
                 : question.text.trim(),
             spread: spreadById(spreadId).name,
             spreadId: spreadId,
             cards: drawCards(spreadSize, Random()),
           );
-          Navigator.of(c).push(
+          Navigator.of(context).push(
             MaterialPageRoute<void>(
               builder: (_) =>
                   DrawPage(reading: reading, journal: widget.journal),
@@ -440,17 +501,20 @@ class _AppShellState extends State<AppShell> {
           );
         },
       ),
-      const SizedBox(height: 16),
-      const Text(
-        '给问题一点空间，也给自己一点时间。',
+      SizedBox(height: 16),
+      Text(
+        translateUi('给问题一点空间，也给自己一点时间。', context),
         textAlign: TextAlign.center,
-        style: TextStyle(color: muted, fontSize: 12),
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          fontSize: 12,
+        ),
       ),
     ],
   );
-  void settings(BuildContext c) => Navigator.of(
-    c,
-  ).push(MaterialPageRoute<void>(builder: (_) => const SettingsPage()));
+  void settings(BuildContext context) => Navigator.of(
+    context,
+  ).push(MaterialPageRoute<void>(builder: (_) => SettingsPage()));
 }
 
 class CardArt extends StatelessWidget {
@@ -467,7 +531,7 @@ class CardArt extends StatelessWidget {
   final String? heroTag, label;
   final bool reversed;
   @override
-  Widget build(BuildContext c) {
+  Widget build(BuildContext context) {
     Widget art = RotatedBox(
       quarterTurns: reversed ? 2 : 0,
       child: Image.asset(
@@ -481,14 +545,18 @@ class CardArt extends StatelessWidget {
       art = Hero(tag: heroTag!, child: art);
     }
     return Semantics(
-      label: label ?? '${card.name}，${reversed ? '逆位' : '正位'}',
+      label: label ?? tr('${card.name}，${reversed ? '逆位' : '正位'}', context),
       button: onTap != null,
       child: Card.outlined(
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: BorderSide(color: rose.withValues(alpha: .45)),
+          side: BorderSide(
+            color: Theme.of(
+              context,
+            ).colorScheme.secondary.withValues(alpha: .45),
+          ),
         ),
         child: InkWell(
           onTap: onTap,

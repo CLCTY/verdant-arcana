@@ -3,23 +3,29 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'spreads.dart';
+import 'localization.dart';
 part 'deck.dart';
 
 class TarotCard {
   const TarotCard(
     this.id,
     this.number,
-    this.name,
+    this._name,
     this.english,
-    this.keywords,
-    this.meaning,
-    this.reverse,
-    this.reflection, {
+    this._keywords,
+    this._meaning,
+    this._reverse,
+    this._reflection, {
     this.category = '大阿卡纳',
   });
-  final String id, number, name, english, meaning, reverse, reflection;
+  final String id, number, _name, english, _meaning, _reverse, _reflection;
   final String category;
-  final List<String> keywords;
+  final List<String> _keywords;
+  String get name => cardName(id, _name, english);
+  List<String> get keywords => cardWords(id, _keywords);
+  String get meaning => cardCopy(id, 'meaning', _meaning);
+  String get reverse => cardCopy(id, 'reverse', _reverse);
+  String get reflection => cardCopy(id, 'reflection', _reflection);
   String get image => 'assets/cards/$id.png';
 }
 
@@ -60,7 +66,7 @@ class DrawnCard {
   const DrawnCard(this.card, {this.reversed = false});
   final TarotCard card;
   final bool reversed;
-  String get orientation => reversed ? '逆位' : '正位';
+  String get orientation => tr(reversed ? '逆位' : '正位');
   String get meaning => reversed ? card.reverse : card.meaning;
   Map<String, Object> toJson() => {'id': card.id, 'reversed': reversed};
   factory DrawnCard.fromJson(Map<String, dynamic> json) => DrawnCard(
@@ -103,10 +109,10 @@ class Reading {
       if (definition.count == cards.length) return definition.positions;
     }
     return cards.length == 1
-        ? ['今日指引']
+        ? [tr('今日指引')]
         : cards.length == 3
-        ? ['当下的状态', '需要留意', '可以尝试']
-        : List.generate(cards.length, (i) => '位置 ${i + 1}');
+        ? ['当下的状态', '需要留意', '可以尝试'].map(tr).toList()
+        : List.generate(cards.length, (i) => '${tr('位置')} ${i + 1}');
   }
 
   Map<String, Object> toJson() => {

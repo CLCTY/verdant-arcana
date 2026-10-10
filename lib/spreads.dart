@@ -1,15 +1,19 @@
+import 'localization.dart';
 import 'package:flutter/material.dart';
 
 class Spread {
   const Spread(
     this.id,
-    this.name,
-    this.description,
-    this.positions,
+    this._name,
+    this._description,
+    this._positions,
     this.points,
   );
-  final String id, name, description;
-  final List<String> positions;
+  final String id, _name, _description;
+  String get name => tr(_name);
+  String get description => tr(_description);
+  List<String> get positions => _positions.map(tr).toList();
+  final List<String> _positions;
   final List<Offset> points;
   int get count => positions.length;
 }
@@ -140,7 +144,7 @@ class SpreadDiagram extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    '${i + 1}',
+                    translateUi('${i + 1}', context),
                     style: TextStyle(
                       fontSize: spread.count > 5 ? 8 : 11,
                       color: scheme.secondary,
@@ -191,7 +195,7 @@ class _SpreadPickerState extends State<SpreadPicker> {
               .toDouble();
       controller.animateTo(
         offset,
-        duration: const Duration(milliseconds: 300),
+        duration: Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
       );
     }
@@ -210,7 +214,7 @@ class _SpreadPickerState extends State<SpreadPicker> {
       controller: controller,
       scrollDirection: Axis.horizontal,
       itemCount: spreads.length,
-      separatorBuilder: (_, _) => const SizedBox(width: 10),
+      separatorBuilder: (_, _) => SizedBox(width: 10),
       itemBuilder: (context, i) {
         final s = spreads[i],
             selected = s.id == widget.selectedId,
@@ -218,7 +222,7 @@ class _SpreadPickerState extends State<SpreadPicker> {
         return Semantics(
           button: true,
           selected: selected,
-          label: '${s.name}，${s.count}张牌',
+          label: translateUi('${s.name}，${s.count}张牌', context),
           child: SizedBox(
             width: 126,
             child: Card.outlined(
@@ -238,27 +242,27 @@ class _SpreadPickerState extends State<SpreadPicker> {
                 key: ValueKey('spread-${s.id}'),
                 onTap: () => widget.onChanged(s),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: AnimatedScale(
                           scale: selected ? 1.04 : 1,
-                          duration: const Duration(milliseconds: 250),
+                          duration: Duration(milliseconds: 250),
                           child: SpreadDiagram(spread: s, selected: selected),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12),
                       Text(
-                        s.name,
+                        translateUi(s.name, context),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
-                        '${s.count} 张牌',
+                        translateUi('${s.count} 张牌', context),
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(color: scheme.onSurfaceVariant),
                       ),

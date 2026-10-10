@@ -1,3 +1,4 @@
+import 'localization.dart';
 import 'package:flutter/material.dart';
 import 'ai.dart';
 import 'models.dart';
@@ -29,7 +30,7 @@ class _AiReadingPanelState extends State<AiReadingPanel> {
     if (!aiSettings.ready) {
       await Navigator.of(
         context,
-      ).push(MaterialPageRoute<void>(builder: (_) => const AiSettingsPage()));
+      ).push(MaterialPageRoute<void>(builder: (_) => AiSettingsPage()));
       return;
     }
     setState(() {
@@ -63,70 +64,76 @@ class _AiReadingPanelState extends State<AiReadingPanel> {
     builder: (context, _) => Card.filled(
       margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const Icon(Icons.auto_awesome_outlined),
-                const SizedBox(width: 10),
+                Icon(Icons.auto_awesome_outlined),
+                SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    'AI 深入解读',
+                    translateUi('AI 深入解读', context),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(
-              aiSettings.ready
-                  ? '将当前问题、牌阵和牌面发送给 ${aiSettings.provider.label}。'
-                  : '连接你的解读服务，获得结合问题与牌阵的解读。',
+              translateUi(
+                aiSettings.ready
+                    ? '将当前问题、牌阵和牌面发送给 ${aiSettings.provider.label}。'
+                    : '连接你的解读服务，获得结合问题与牌阵的解读。',
+                context,
+              ),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             if (widget.reading.aiText.isNotEmpty) ...[
               Text(
-                widget.reading.aiProvider,
+                translateUi(widget.reading.aiProvider, context),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               SelectableText(
                 widget.reading.aiText,
-                style: const TextStyle(fontSize: 16, height: 1.8),
+                style: TextStyle(fontSize: 16, height: 1.8),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
             ],
             if (busy) ...[
-              const LinearProgressIndicator(),
-              const SizedBox(height: 12),
-              const Text('正在整理牌面的故事…'),
-              const SizedBox(height: 16),
+              LinearProgressIndicator(),
+              SizedBox(height: 12),
+              Text(translateUi('正在整理牌面的故事…', context)),
+              SizedBox(height: 16),
             ],
             if (error != null) ...[
               Semantics(
                 liveRegion: true,
                 child: Text(
-                  error!,
+                  translateUi(error!, context),
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
             ],
             FilledButton.tonalIcon(
-              key: const ValueKey('ai-reading'),
+              key: ValueKey('ai-reading'),
               onPressed: busy ? null : generate,
               icon: Icon(
                 aiSettings.ready ? Icons.auto_awesome : Icons.key_outlined,
               ),
               label: Text(
-                !aiSettings.ready
-                    ? '配置 AI 接入'
-                    : widget.reading.aiText.isEmpty
-                    ? '生成 AI 解读'
-                    : '重新解读',
+                translateUi(
+                  !aiSettings.ready
+                      ? '配置 AI 接入'
+                      : widget.reading.aiText.isEmpty
+                      ? '生成 AI 解读'
+                      : '重新解读',
+                  context,
+                ),
               ),
             ),
             if (aiSettings.ready)
@@ -135,10 +142,10 @@ class _AiReadingPanelState extends State<AiReadingPanel> {
                     ? null
                     : () => Navigator.of(context).push(
                         MaterialPageRoute<void>(
-                          builder: (_) => const AiSettingsPage(),
+                          builder: (_) => AiSettingsPage(),
                         ),
                       ),
-                child: const Text('更换服务'),
+                child: Text(translateUi('更换服务', context)),
               ),
           ],
         ),

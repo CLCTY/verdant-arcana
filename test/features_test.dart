@@ -339,9 +339,9 @@ void main() {
       await t.tap(find.text('OpenCode Go'));
       await t.pumpAndSettle();
       expect(find.text('deepseek-v4.1-flash'), findsWidgets);
-      await t.tap(find.byTooltip('Back'));
+      await t.tap(find.byType(BackButton));
       await t.pumpAndSettle();
-      await t.tap(find.byTooltip('Back'));
+      await t.tap(find.byType(BackButton));
       await t.pumpAndSettle();
       await t.tap(find.text('日记').last);
       await t.pumpAndSettle();

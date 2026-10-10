@@ -1,12 +1,22 @@
 # 翠启 · Verdant Arcana
 
-<img src="assets/branding/app-icon.png" width="96" alt="翠启：新月与星芒图标">
+<img src="assets/branding/app-icon.png" width="96" alt="翠启：扇形塔罗牌图标">
 
 中文 | [English](README.en.md)
 
-「翠」是翡翠绿，「启」是灵感与启示。新月环绕四芒星，以玫瑰金勾勒直觉与指引。
+「翠」是翡翠绿，「启」是灵感与启示。三张扇形塔罗牌与几何菱形构成图标，以玫瑰金勾勒思索与指引。
 
-Flutter 深色手机应用，采用每日一牌 / 大牌面布局，翡翠绿与玫瑰金。版本 0.2。
+Flutter 深色手机应用，采用每日一牌 / 大牌面布局，OLED 纯黑背景与系统动态配色。版本 0.3。
+
+## 0.3 更新
+
+- 页面背景、顶部栏及启动背景为 `#000000`；底栏使用动态 `surfaceContainer`。按钮、图标、文字与容器使用原生 MD3 颜色角色。
+- 使用 Material 官方 `dynamic_color`：Android 12+ 读取系统壁纸色板；Windows 读取系统强调色（Windows 开启「从背景自动选取强调色」时可间接跟随壁纸）。不支持动态取色的系统及 Web 使用默认翡翠配色。应用回到前台时刷新配色，保留导航和输入状态。
+- 设置 → 语言：简体中文 / English / 日本語，选择即时生效并保存。界面、系统组件、牌名、关键词、牌义与牌阵均支持三语言；英文与日文使用独立精简解读文案。日记正文、用户问题和已有 AI 解读保留原文；新 AI 解读使用所选语言。
+- 图标更换为扇形塔罗牌与几何菱形。
+- 18 项测试通过；真实设备的系统动态配色尚未验证，模拟系统色板和前台恢复已测试。
+
+![OLED 与多语言界面](design/personalization-preview.png)
 
 ## 功能
 
@@ -72,6 +82,7 @@ Android 工程已包含联网权限，但本机缺少 Android SDK，未生成 AP
 - `lib/pages.dart`：抽牌、解读、牌库与详情。
 - `lib/journal.dart`：多选删除与撤销。
 - `lib/settings.dart`、`lib/ai.dart`、`lib/ai_panel.dart`：AI 配置和解读。
+- `lib/localization.dart`：三语言资源、78 张牌的英日内容和语言偏好持久化。
 - `test/`：抽牌 / 78 张资源完整性、牌阵、保存迁移、删除撤销、AI 协议和页面交互测试。
 - `design/`：实际渲染截图与 78 张卡面总览。
 - [品牌与图标](BRANDING.md)：名称、配色、图标来源与使用说明。
