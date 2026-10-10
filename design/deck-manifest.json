@@ -1,0 +1,470 @@
+[
+  {
+    "id": "fool",
+    "width": 474,
+    "height": 830,
+    "sha256": "f3004618c07b1c3c6d8d94e7aa6ba0b4f357e7dcedaa54df0395240430bda63b"
+  },
+  {
+    "id": "magician",
+    "width": 474,
+    "height": 830,
+    "sha256": "ec41d017d6cb29efcd4d97f25b926557677e92cf6d92b28f872d0c6eb94dc9c6"
+  },
+  {
+    "id": "high_priestess",
+    "width": 474,
+    "height": 830,
+    "sha256": "79b776edc10df732074c556f07412d861b69da86368ebbb21de0a120eb359a3b"
+  },
+  {
+    "id": "empress",
+    "width": 474,
+    "height": 830,
+    "sha256": "bc67c9b5b4c3bd761283f09daff5779aace6937f9b45ea035fad0699874e21c4"
+  },
+  {
+    "id": "emperor",
+    "width": 474,
+    "height": 829,
+    "sha256": "32c4c8d0879fd4a035155c388555139ad6a7599a53a5719ec1b3342a6cb39622"
+  },
+  {
+    "id": "hierophant",
+    "width": 474,
+    "height": 829,
+    "sha256": "9b73cf41a08a2b6bed57625f5f52279d906345322d52ee4abcde21eed7d90fa8"
+  },
+  {
+    "id": "lovers",
+    "width": 474,
+    "height": 829,
+    "sha256": "8039cacc30e019fa1ed9014611be35262a69005d71e8018750af2afd2074537f"
+  },
+  {
+    "id": "chariot",
+    "width": 474,
+    "height": 829,
+    "sha256": "e05d2320c62d8f5e3c1cba7f325a68e512ae04829a1041959329f508e789121d"
+  },
+  {
+    "id": "strength",
+    "width": 474,
+    "height": 829,
+    "sha256": "4606ecd00258c3410cb7e9cc3302d7e6625f8f5bce562a12b00f5c5895695e1e"
+  },
+  {
+    "id": "hermit",
+    "width": 474,
+    "height": 829,
+    "sha256": "ab83e22b6ac5aaa0a0c6398845ed9931123e4c67958aec4e377ef6c323aecdde"
+  },
+  {
+    "id": "wheel",
+    "width": 474,
+    "height": 830,
+    "sha256": "c803f61e186e98cd852f4da39545d8f678e7a987cb55c4acae28df3331e577a7"
+  },
+  {
+    "id": "justice",
+    "width": 474,
+    "height": 830,
+    "sha256": "c9d6f790b0c27ce0a1db9112f7eccea95dc760cf904252078550417177f091f9"
+  },
+  {
+    "id": "hanged_man",
+    "width": 474,
+    "height": 829,
+    "sha256": "3ec57e0e1209bda4c63af2430a445c054a006b23445240d83209e5906d93f90c"
+  },
+  {
+    "id": "death",
+    "width": 936,
+    "height": 1681,
+    "sha256": "1ffacf95ed8326a5856cdd4e655643a2260a8220f96f851b684f011c95c16a2d"
+  },
+  {
+    "id": "temperance",
+    "width": 474,
+    "height": 830,
+    "sha256": "cf4a15788c63ddc5dce0eb9b6cc062fd6c5b9705f17f4efa2c3146e5f2cd620b"
+  },
+  {
+    "id": "devil",
+    "width": 474,
+    "height": 830,
+    "sha256": "361da00d436d97eb876bd3948ad277926ddbfd83455275a342c508305f5f2e5b"
+  },
+  {
+    "id": "tower",
+    "width": 474,
+    "height": 829,
+    "sha256": "ac632a916eda720dbdf6f87f414e5bac124627841b7d4599ab697be6fb4657a1"
+  },
+  {
+    "id": "star",
+    "width": 936,
+    "height": 1681,
+    "sha256": "faf60de90d378dfb0ab7d3d52a376f03c117af3555a15d0d7285dcc207b3fffa"
+  },
+  {
+    "id": "moon",
+    "width": 936,
+    "height": 1681,
+    "sha256": "f66ac15278b7f11fbb1c3e964b430aca2c6f24375c9594f2491d1c751dfcb0e8"
+  },
+  {
+    "id": "sun",
+    "width": 936,
+    "height": 1681,
+    "sha256": "4355ead004f894ec5624a61677d53d74e01d8445b2d34373b254dd9a13349f05"
+  },
+  {
+    "id": "judgement",
+    "width": 474,
+    "height": 829,
+    "sha256": "cd16a4df81fd80a0d8698f18bc66fbd4bdc60116d74c12f03d34ff0ffc1e6876"
+  },
+  {
+    "id": "world",
+    "width": 474,
+    "height": 830,
+    "sha256": "e0e06f08f5fc96a4fff57db025455c7e4c3780e0a6d6be5e2f4948f702a58b5a"
+  },
+  {
+    "id": "wands_ace",
+    "width": 474,
+    "height": 830,
+    "sha256": "abd92e8b0b7d6e117e998cea86eb6df7347965beec25179d353ed62780fa2f42"
+  },
+  {
+    "id": "wands_two",
+    "width": 474,
+    "height": 830,
+    "sha256": "8fe2376f1f089336b09deae98a2121d5f0994db47297b4cebf721a64078442eb"
+  },
+  {
+    "id": "wands_three",
+    "width": 474,
+    "height": 830,
+    "sha256": "588e9910947ff3b2dfb2c5241647d94448b68d0036151fec760077d93f321fd4"
+  },
+  {
+    "id": "wands_four",
+    "width": 474,
+    "height": 830,
+    "sha256": "bedbf3dc8e91b76e64085081f14c05c6ab03fc6cbd87fb22470b1a3747205ad3"
+  },
+  {
+    "id": "wands_five",
+    "width": 474,
+    "height": 830,
+    "sha256": "d955c939ca82ee585f3914e2b982c167732d8ca6c824768e179301ac4b4f847c"
+  },
+  {
+    "id": "wands_six",
+    "width": 474,
+    "height": 830,
+    "sha256": "22ba0c9c8a767cd3ec6ee9dcc481d8a13a5f8e1d0d874c6c974cb871bc74d7c3"
+  },
+  {
+    "id": "wands_seven",
+    "width": 474,
+    "height": 830,
+    "sha256": "ecefb88ac664eb84403237f67b371ab40ecccd9efe62d7d9e577bf5a94a7eb13"
+  },
+  {
+    "id": "wands_eight",
+    "width": 474,
+    "height": 830,
+    "sha256": "d61f6910178b4871ebcaf6896fe0a5fce27330cebecb1f362a16b86bc209a2b7"
+  },
+  {
+    "id": "wands_nine",
+    "width": 474,
+    "height": 830,
+    "sha256": "7c4287d36e93b907fccd5f230ff59a6ad08147e32e4e1b25c6df4eb623ccb224"
+  },
+  {
+    "id": "wands_ten",
+    "width": 474,
+    "height": 829,
+    "sha256": "5bf259eff66e486e606d409e5df3a8fc42350d1586a6f27207fce7986cd4bc74"
+  },
+  {
+    "id": "wands_page",
+    "width": 474,
+    "height": 829,
+    "sha256": "d9061e6bca55c36370711f8f0d3f9fd87f28176490147cd8fa7bcaf66a00301d"
+  },
+  {
+    "id": "wands_knight",
+    "width": 474,
+    "height": 830,
+    "sha256": "41094e726a434a10cad6ba8fa5e2978a56e09bc36ebef3fb05e09d8044f2a84c"
+  },
+  {
+    "id": "wands_queen",
+    "width": 474,
+    "height": 830,
+    "sha256": "3f0ca4ca80096c3b2cfcc82a7013c95785dce537d91198b5a8ba8cd809823286"
+  },
+  {
+    "id": "wands_king",
+    "width": 474,
+    "height": 829,
+    "sha256": "5fa320508f004e27351bb0cd37c03cde0968b44a4bc424e9202cd4c7617b3a61"
+  },
+  {
+    "id": "cups_ace",
+    "width": 474,
+    "height": 829,
+    "sha256": "c3c4876e4235dc7aecf4721c923fd826e67069cee0f096ca17673252299e624a"
+  },
+  {
+    "id": "cups_two",
+    "width": 474,
+    "height": 830,
+    "sha256": "2cfff190ad8ac88ea173a9f2abb5c62faa4e14420ad2ad038817c48d32b8e40a"
+  },
+  {
+    "id": "cups_three",
+    "width": 474,
+    "height": 830,
+    "sha256": "a526ff18cc17e6ecf929fdc028af93bcee87f03be7ed57273f2ef8c22d267404"
+  },
+  {
+    "id": "cups_four",
+    "width": 474,
+    "height": 830,
+    "sha256": "a0ec864bf7d9e495dadb09a4d3fa547f341fe1f83b4c7b9f0dc46c01a921bd4d"
+  },
+  {
+    "id": "cups_five",
+    "width": 474,
+    "height": 830,
+    "sha256": "a28b9f782b8d15d126937bed394a12b88c674f8cb2876b94956777174e7ef194"
+  },
+  {
+    "id": "cups_six",
+    "width": 947,
+    "height": 1661,
+    "sha256": "3fee93eef59e85227308b7f5f0820c8d511af8c3935cda2cf3b3ed66a7d698ff"
+  },
+  {
+    "id": "cups_seven",
+    "width": 474,
+    "height": 830,
+    "sha256": "876d6d442aa637c4831c3092df51580aec1c829e71ba50f6df16c5271404a1ee"
+  },
+  {
+    "id": "cups_eight",
+    "width": 474,
+    "height": 829,
+    "sha256": "ce34161453092ae6ec0cdaf0fabd7583d5a06910b5027753c50662a34ad6224b"
+  },
+  {
+    "id": "cups_nine",
+    "width": 474,
+    "height": 829,
+    "sha256": "87df7aceeb10a04f2dd85d0cdf73454287db31fd21aedd601b3a667e6f28d925"
+  },
+  {
+    "id": "cups_ten",
+    "width": 474,
+    "height": 830,
+    "sha256": "42da70178017b3bef68190591f9a7b991c5b5ea73dde39de72efb2940390e539"
+  },
+  {
+    "id": "cups_page",
+    "width": 474,
+    "height": 830,
+    "sha256": "1d24d8dee0aa5f77156020cde69f20cf361826264308a6f196522bbe8b9d28ce"
+  },
+  {
+    "id": "cups_knight",
+    "width": 474,
+    "height": 805,
+    "sha256": "4760e7f4e3960b206ee7552226af04b7044f3c6d90c27f16e6a29fb476bc834a"
+  },
+  {
+    "id": "cups_queen",
+    "width": 474,
+    "height": 805,
+    "sha256": "25b2b6678eae30e3e14fb328697afadb23bf6b7a1de6140b50dffc6bf634dbf6"
+  },
+  {
+    "id": "cups_king",
+    "width": 474,
+    "height": 849,
+    "sha256": "b69fba4cf20c4b9e496d92d7cb24a897fcc12eee91575cedeb454663c4ca5d69"
+  },
+  {
+    "id": "swords_ace",
+    "width": 474,
+    "height": 849,
+    "sha256": "190a590677304386ef1e6f3baea641f0b7f18fd163c729823a139812e095f1bc"
+  },
+  {
+    "id": "swords_two",
+    "width": 474,
+    "height": 829,
+    "sha256": "c10c0c3c5a10080a1659c092c45624997b5c64a065da2cb4eb83b3a5f2b6870a"
+  },
+  {
+    "id": "swords_three",
+    "width": 474,
+    "height": 829,
+    "sha256": "8b5d399123a6a0bcf716b2b58e5aa464c0e12231fcd3b5f5c9c8930f2e3a6724"
+  },
+  {
+    "id": "swords_four",
+    "width": 474,
+    "height": 829,
+    "sha256": "2430eecb7b2a2db0a6ef1312e5aabb7e30f35e3a83a86a8a128243ab12c88801"
+  },
+  {
+    "id": "swords_five",
+    "width": 474,
+    "height": 829,
+    "sha256": "5e64d0fdac1f50c889e392f5fd5b1e758b3e32dc49271351578ffe378daed9a1"
+  },
+  {
+    "id": "swords_six",
+    "width": 474,
+    "height": 829,
+    "sha256": "2de4c5c16b5b2f4e7ed754907dce59ddbe86f8721a0427500166d063e96ae1c5"
+  },
+  {
+    "id": "swords_seven",
+    "width": 948,
+    "height": 1659,
+    "sha256": "a4b0ad71cca3cd2faed053396ab4d66f5e398bfae5fdaa7eada732c55ea52aad"
+  },
+  {
+    "id": "swords_eight",
+    "width": 474,
+    "height": 830,
+    "sha256": "3d22df0e3aff85b290aba0a290228eb1c633261e96d0d34ecd63c0bfeeee57a4"
+  },
+  {
+    "id": "swords_nine",
+    "width": 947,
+    "height": 1661,
+    "sha256": "3a1484c8b83071b8cb4e76705cc2d30e47610a8d8db4a01a183b68d99b0fbe3b"
+  },
+  {
+    "id": "swords_ten",
+    "width": 474,
+    "height": 830,
+    "sha256": "337cb462e38ea2b17325eaac774763b4a9df55149e51d910de283eb84a48590f"
+  },
+  {
+    "id": "swords_page",
+    "width": 474,
+    "height": 830,
+    "sha256": "5229e29fed45aa8fce828a8374729ee76e305800576cd20fc5deaf4da4a9c70f"
+  },
+  {
+    "id": "swords_knight",
+    "width": 474,
+    "height": 830,
+    "sha256": "86dcabf4ccb96c1df2564901855d12dc22df64ddca4006cc4e790f8fee900909"
+  },
+  {
+    "id": "swords_queen",
+    "width": 474,
+    "height": 830,
+    "sha256": "f7e6cbc08c44376f8902203f903753c1c7d173f0781b42a39772a1b2f72fac5c"
+  },
+  {
+    "id": "swords_king",
+    "width": 474,
+    "height": 829,
+    "sha256": "ea4abb9e9a9d3b49779270609784367c988e50f1d9e270b3e1649a38d512e347"
+  },
+  {
+    "id": "pentacles_ace",
+    "width": 474,
+    "height": 829,
+    "sha256": "4d7ca1eb3664b6a26c53e9bb3bc279f522ab5a75158f482c4a3fadf4bba7a0cd"
+  },
+  {
+    "id": "pentacles_two",
+    "width": 474,
+    "height": 829,
+    "sha256": "6eab28d4e6fbd07d204ae1c04531e8d9c27903d4548def04819161c748a9f4b4"
+  },
+  {
+    "id": "pentacles_three",
+    "width": 474,
+    "height": 829,
+    "sha256": "e5ffda9f75638f0d2049b7e9421e9d119b4936a2c4069e4c46ac98af925d346d"
+  },
+  {
+    "id": "pentacles_four",
+    "width": 474,
+    "height": 829,
+    "sha256": "ba248735438dcb5dbdebd985142ff2d1d0dc66fbb2d4be749252a8b2e96bb17c"
+  },
+  {
+    "id": "pentacles_five",
+    "width": 474,
+    "height": 829,
+    "sha256": "de1b3d94d7ad0ccc07cd6a9101056d2bd2a5f286148d759bc9099571af836dd4"
+  },
+  {
+    "id": "pentacles_six",
+    "width": 474,
+    "height": 829,
+    "sha256": "6b8fde6f161654afb8197c1bc1d8641d8f2d5578d3cfcf9a87036c573e9852c7"
+  },
+  {
+    "id": "pentacles_seven",
+    "width": 474,
+    "height": 829,
+    "sha256": "71cf8caa2dc82dfba53d8fe73986f5a948c84ae3e1e9cba26c0cb98e25f168ce"
+  },
+  {
+    "id": "pentacles_eight",
+    "width": 474,
+    "height": 830,
+    "sha256": "eaee2f7bb020d9cc2d241d4233368d4f89f8f5775dca24c3933cbd0440e61bfe"
+  },
+  {
+    "id": "pentacles_nine",
+    "width": 474,
+    "height": 830,
+    "sha256": "6ffb1f575ac798441af040cb231517b3f522e1cc5af0c3e415390396e1394a60"
+  },
+  {
+    "id": "pentacles_ten",
+    "width": 936,
+    "height": 1681,
+    "sha256": "d80c7b2ad49475e1daa88bfb96732bc54aea326a7ea9cf1fde5cfa2fca8f2b96"
+  },
+  {
+    "id": "pentacles_page",
+    "width": 474,
+    "height": 830,
+    "sha256": "152a2e5b63e6879d162d17cab929aa934e91d64ef5f0c3ae445d238c7fef580b"
+  },
+  {
+    "id": "pentacles_knight",
+    "width": 474,
+    "height": 829,
+    "sha256": "cae837b47067542887ceeefe33c0d6d048813c98160b242982927c410b38bb6d"
+  },
+  {
+    "id": "pentacles_queen",
+    "width": 474,
+    "height": 829,
+    "sha256": "b21bf7e5a6ef39c83d86b9e80d4b6d8d0275c877bb327573b30995ffc690b55a"
+  },
+  {
+    "id": "pentacles_king",
+    "width": 474,
+    "height": 829,
+    "sha256": "e0458ba0e47aa880fa86d216028d77283fd94db551480a0c7a16a37063894336"
+  }
+]
