@@ -74,7 +74,9 @@ flutter test
 flutter build apk --release
 ```
 
-The Android project includes internet permission. An Android SDK is required to build the APK; no APK or physical-device verification is included in this release. Windows runner files are supplied, but Windows native compilation has not been validated.
+Android APKs are built by [GitHub Actions](https://github.com/CLCTY/verdant-arcana/actions/workflows/release.yml) and published to [Releases](https://github.com/CLCTY/verdant-arcana/releases). Choose the universal APK if unsure; most modern phones can use the smaller arm64-v8a APK. Physical Android device testing has not been performed. Windows runner files are supplied, but Windows native compilation has not been validated.
+
+Release builds use a dedicated project signing key. Local release builds require private `android/key.properties` and a keystore, following [Flutter's signing guide](https://docs.flutter.dev/deployment/android#sign-the-app); these are excluded from Git. Maintainers configure `ANDROID_KEYSTORE_BASE64`, `ANDROID_STORE_PASSWORD`, `ANDROID_KEY_PASSWORD`, and `ANDROID_KEY_ALIAS` in Actions Secrets, then push a `v*` tag matching the pubspec version to build, verify signatures, generate checksums and publish.
 
 Journal data stays on the current device or browser origin. Clearing app/site data removes it. Cloud sync and export are not implemented.
 

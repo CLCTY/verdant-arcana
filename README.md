@@ -71,7 +71,9 @@ flutter build web --release --no-web-resources-cdn --no-wasm-dry-run
 flutter build apk --release
 ```
 
-Android 工程已包含联网权限，但本机缺少 Android SDK，未生成 APK，也未进行 Android 真机验证。
+Android APK 通过 [GitHub Actions](https://github.com/CLCTY/verdant-arcana/actions/workflows/release.yml) 构建并发布至 [Releases](https://github.com/CLCTY/verdant-arcana/releases)。不确定架构时下载 universal APK；现代手机通常可用更小的 arm64-v8a APK。尚未进行 Android 真机验证。
+
+发布使用项目专用签名。自行构建 release APK 前，需要按 [Flutter 签名说明](https://docs.flutter.dev/deployment/android#sign-the-app) 配置私密的 `android/key.properties` 和密钥库；这些文件不会进入 Git。维护者在仓库 Actions Secrets 中配置 `ANDROID_KEYSTORE_BASE64`、`ANDROID_STORE_PASSWORD`、`ANDROID_KEY_PASSWORD`、`ANDROID_KEY_ALIAS` 后，推送与 `pubspec.yaml` 版本对应的 `v*` 标签即可构建、验证签名、生成校验值并发布。
 
 日记保存在设备或当前浏览器站点本地，清除应用 / 站点数据会清除记录。尚无云同步和导出。
 
