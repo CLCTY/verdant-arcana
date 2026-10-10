@@ -1,5 +1,5 @@
 name: emerald_tarot
-description: "Verdant Arcana — a dark Material 3 tarot app with 78 illustrated cards."
+description: "Arcana Notes — a dark Material 3 tarot app with 78 illustrated cards."
 publish_to: 'none'
 version: 0.3.0+3
 
@@ -12,6 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   dynamic_color: ^1.8.1
+  url_launcher: ^6.3.3
   shared_preferences: ^2.5.3
   cupertino_icons: ^1.0.8
   http: ^1.6.0

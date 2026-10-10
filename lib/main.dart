@@ -1,5 +1,6 @@
 import 'localization.dart';
 import 'dart:math';
+import 'dart:ui' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -128,7 +129,7 @@ class _TarotAppState extends State<TarotApp> with WidgetsBindingObserver {
     builder: (context, _) => DynamicColorBuilder(
       key: paletteKey,
       builder: (_, dark) => MaterialApp(
-        title: '翠启 · Verdant Arcana',
+        title: '星笺 · Arcana Notes',
         debugShowCheckedModeBanner: false,
         locale: Locale(appPreferences.language),
         supportedLocales: [Locale('zh'), Locale('en'), Locale('ja')],
@@ -162,6 +163,7 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   int selected = 0;
+  final pageController = PageController();
   String spreadId = 'three';
   int get spreadSize => spreadById(spreadId).count;
   String topic = '自我';
@@ -195,6 +197,7 @@ class _AppShellState extends State<AppShell> {
 
   @override
   void dispose() {
+    pageController.dispose();
     question.dispose();
     super.dispose();
   }
@@ -205,6 +208,15 @@ class _AppShellState extends State<AppShell> {
     }
     HapticFeedback.selectionClick();
     setState(() => selected = value);
+    if (reducedMotion(context)) {
+      pageController.jumpToPage(value);
+    } else {
+      pageController.animateToPage(
+        value,
+        duration: motion,
+        curve: Curves.easeOutCubic,
+      );
+    }
   }
 
   void openReading(Reading reading) => Navigator.of(context).push(
@@ -226,7 +238,7 @@ class _AppShellState extends State<AppShell> {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text(translateUi(['翠启', '占卜', '牌库', '日记'][selected], context)),
+        title: Text(translateUi(['星笺', '占卜', '牌库', '日记'][selected], context)),
         actions: [
           IconButton(
             tooltip: translateUi('设置', context),
@@ -240,20 +252,19 @@ class _AppShellState extends State<AppShell> {
       ),
       body: SafeArea(
         top: false,
-        child: AnimatedSwitcher(
-          duration: reducedMotion(context) ? Duration.zero : motion,
-          switchInCurve: Curves.easeOutCubic,
-          transitionBuilder: (child, animation) => FadeTransition(
-            opacity: animation,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: Offset(0, .025),
-                end: Offset.zero,
-              ).animate(animation),
-              child: child,
-            ),
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(
+            dragDevices: {
+              ...ScrollConfiguration.of(context).dragDevices,
+              PointerDeviceKind.mouse,
+            },
           ),
-          child: KeyedSubtree(key: ValueKey(selected), child: pages[selected]),
+          child: PageView(
+            key: const ValueKey('main-pages'),
+            controller: pageController,
+            onPageChanged: (value) => setState(() => selected = value),
+            children: [for (final page in pages) _RetainedPage(child: page)],
+          ),
         ),
       ),
       bottomNavigationBar: NavigationBar(
@@ -515,6 +526,24 @@ class _AppShellState extends State<AppShell> {
   void settings(BuildContext context) => Navigator.of(
     context,
   ).push(MaterialPageRoute<void>(builder: (_) => SettingsPage()));
+}
+
+class _RetainedPage extends StatefulWidget {
+  const _RetainedPage({required this.child});
+  final Widget child;
+  @override
+  State<_RetainedPage> createState() => _RetainedPageState();
+}
+
+class _RetainedPageState extends State<_RetainedPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
+  }
 }
 
 class CardArt extends StatelessWidget {

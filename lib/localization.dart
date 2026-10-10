@@ -212,7 +212,12 @@ const translations = <String, List<String>>{
     '日記を読み込めませんでした。しばらくしてからお試しください。',
   ],
   '配置 AI 接入': ['Configure AI', 'AI 接続を設定'],
-  "翠启": ["Verdant Arcana", "翠啓"],
+  "星笺": ["Arcana Notes", "星の便り"],
+  "GitHub 仓库": ["GitHub repository", "GitHub リポジトリ"],
+  "无法打开链接，请稍后重试。": [
+    "Could not open the link. Please try again.",
+    "リンクを開けませんでした。もう一度お試しください。",
+  ],
   "设置": ["Settings", "設定"],
   "今日": ["Today", "今日"],
   "占卜": ["Reading", "占い"],

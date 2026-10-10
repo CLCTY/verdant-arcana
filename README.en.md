@@ -1,10 +1,10 @@
-# 翠启 · Verdant Arcana
+# 星笺 · Arcana Notes
 
-<img src="assets/branding/app-icon.png" width="96" alt="Verdant Arcana tarot card fan icon">
+<img src="assets/branding/app-icon.png" width="96" alt="Arcana Notes tarot card fan icon">
 
 [中文](README.md) | English
 
-A dark Flutter tarot app with OLED black backgrounds and system dynamic colors, centered on a large daily card. The Chinese name **翠启** combines emerald with insight; **Verdant Arcana** connects the palette to tarot's arcana. Version 0.3.
+A dark Flutter tarot app with OLED black backgrounds and system dynamic colors, centered on a large daily card. The name **星笺 / Arcana Notes** evokes a note from the stars and a journal of tarot reflections. Version 0.3.
 
 ## What's new in 0.3
 
@@ -12,9 +12,9 @@ A dark Flutter tarot app with OLED black backgrounds and system dynamic colors, 
 - Material's `dynamic_color` provides Android 12+ wallpaper palettes and Windows system accent colors. Windows can derive its accent from wallpaper when that option is enabled in Windows settings. Unsupported platforms and the Web use an emerald fallback. Resuming the app refreshes the palette without resetting navigation or unfinished input.
 - Settings → Language offers Simplified Chinese, English and Japanese, with immediate updates and persistent selection. UI, native Material controls, card names, keywords, interpretations and spreads are localized. English and Japanese card interpretations use separate concise copy. User questions, journal text and existing AI readings retain their original language; new AI responses use the selected language.
 - A new three-card fan and geometric diamond icon.
-- 18 tests pass, including mocked system palette updates, state retention, language persistence and preservation of journal text. Real-device dynamic colors remain unverified.
+- 21 Flutter tests pass, including mocked system palette updates, state retention, language persistence and preservation of journal text. Real-device dynamic colors remain unverified.
 
-![OLED and multilingual interface](design/personalization-preview.png)
+![Arcana Notes home and settings](design/personalization-preview.png)
 
 ## Features
 
@@ -26,7 +26,8 @@ A dark Flutter tarot app with OLED black backgrounds and system dynamic colors, 
 - Local journal with long-press selection, multiple deletion, select all and an eight-second undo window.
 - Optional AI reading with separate credentials for DeepSeek and OpenCode Go.
 - Official Flutter **Material 3** components, `useMaterial3: true`, dark mode only. No third-party M3E component package.
-- Ripple feedback, animated navigation and spread selection, page transitions, Hero transitions, 700 ms 3D card flips and orientation changes.
+- Tab taps animate horizontally; swipe between the four main pages while retaining input, filters and scroll positions. Ripple feedback, animated spread selection, Hero transitions, 700 ms 3D card flips and orientation changes remain available.
+- Settings includes a clickable GitHub repository link.
 
 The interface supports Chinese, English and Japanese. The printed lettering inside card illustrations is part of the artwork and remains unchanged.
 
@@ -45,7 +46,7 @@ Native builds use system-backed secure storage for API keys. Web preview keys re
 
 The local preview server (`node tool/preview.cjs`) provides a same-origin AI relay because official endpoints may reject browser CORS preflight. It binds only to 127.0.0.1, accepts same-origin JSON requests, forwards only to the fixed official DeepSeek and OpenCode Go endpoints, and never logs or persists credentials. Native builds continue connecting directly. Static hosting still needs provider CORS support or a trusted backend. The relay does not override provider permissions, balance or usage policies, and never automatically retries generation requests. Run `node --test tool/preview.test.cjs` to test the relay; restart the server after changes.
 
-Live authentication and billing have not been tested with real API keys. Mock HTTP tests cover request formats, response parsing, error handling and credential isolation. Browser requests may encounter provider CORS restrictions; no proxy is supplied to bypass them.
+Live authentication and billing have not been tested with real API keys. Mock HTTP tests cover request formats, response parsing, error handling and credential isolation. Browser builds use the local relay only when served by the project preview server.
 
 ## Run locally
 
@@ -96,7 +97,7 @@ Journal data stays on the current device or browser origin. Clearing app/site da
 | `assets/cards/` | 78 finished illustrations and one card back |
 | `test/` | Deck/resource integrity, spreads, journal, AI and UI tests |
 
-The internal Dart package remains `emerald_tarot` to preserve imports and existing local storage identifiers. User-facing branding is Verdant Arcana / 翠启. See [BRANDING.md](BRANDING.md) for the icon and palette.
+The internal Dart package remains `emerald_tarot` to preserve imports and existing local storage identifiers. User-facing branding is Arcana Notes / 星笺. See [BRANDING.md](BRANDING.md) for the icon and palette.
 
 ## Assets and licensing
 

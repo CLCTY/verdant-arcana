@@ -1,10 +1,10 @@
-# 翠启 · Verdant Arcana
+# 星笺 · Arcana Notes
 
-<img src="assets/branding/app-icon.png" width="96" alt="翠启：扇形塔罗牌图标">
+<img src="assets/branding/app-icon.png" width="96" alt="星笺：扇形塔罗牌图标">
 
 中文 | [English](README.en.md)
 
-「翠」是翡翠绿，「启」是灵感与启示。三张扇形塔罗牌与几何菱形构成图标，以玫瑰金勾勒思索与指引。
+「星」呼应星辰与指引，「笺」对应每日一牌与私人日记。三张扇形塔罗牌与几何菱形构成图标，以玫瑰金勾勒思索与指引。
 
 Flutter 深色手机应用，采用每日一牌 / 大牌面布局，OLED 纯黑背景与系统动态配色。版本 0.3。
 
@@ -14,9 +14,9 @@ Flutter 深色手机应用，采用每日一牌 / 大牌面布局，OLED 纯黑�
 - 使用 Material 官方 `dynamic_color`：Android 12+ 读取系统壁纸色板；Windows 读取系统强调色（Windows 开启「从背景自动选取强调色」时可间接跟随壁纸）。不支持动态取色的系统及 Web 使用默认翡翠配色。应用回到前台时刷新配色，保留导航和输入状态。
 - 设置 → 语言：简体中文 / English / 日本語，选择即时生效并保存。界面、系统组件、牌名、关键词、牌义与牌阵均支持三语言；英文与日文使用独立精简解读文案。日记正文、用户问题和已有 AI 解读保留原文；新 AI 解读使用所选语言。
 - 图标更换为扇形塔罗牌与几何菱形。
-- 18 项测试通过；真实设备的系统动态配色尚未验证，模拟系统色板和前台恢复已测试。
+- 21 项 Flutter 测试通过；真实设备的系统动态配色尚未验证，模拟系统色板和前台恢复已测试。
 
-![OLED 与多语言界面](design/personalization-preview.png)
+![星笺首页与设置](design/personalization-preview.png)
 
 ## 功能
 
@@ -27,7 +27,8 @@ Flutter 深色手机应用，采用每日一牌 / 大牌面布局，OLED 纯黑�
 - 牌库搜索和分类筛选，正逆位切换；本地日记保存、长按多选、全选删除和 8 秒撤销。
 - AI 配置入口：选择服务、模型、独立 API Key、保存、测试连接、移除密钥。解读页可主动请求深入解读，返回内容可随日记保存。
 - 官方 Flutter MD3 组件：NavigationBar、AppBar、Card、ListTile、FilledButton、OutlinedButton、TextButton、IconButton、FilterChip、SegmentedButton、SearchBar、TextField、DropdownMenu、Checkbox、SnackBar 和进度指示器。固定 `useMaterial3: true`、深色模式。
-- 水波纹、底栏动画、页面淡入位移、Hero、700ms 3D 翻牌、正逆位旋转、图形选项切换和保存反馈。
+- 底栏点击通过左右滑动动画切换页面；页面支持左右手势切换，保留输入、筛选和滚动状态。另有水波纹、Hero、700ms 3D 翻牌、正逆位旋转、图形选项切换和保存反馈。
+- 设置提供可点击的 GitHub 仓库地址。
 
 ## AI 接入
 

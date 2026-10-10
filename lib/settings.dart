@@ -1,7 +1,10 @@
 import 'localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'ai.dart';
+
+const repositoryUrl = 'https://github.com/CLCTY/verdant-arcana';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -93,6 +96,32 @@ class SettingsPage extends StatelessWidget {
           subtitle: Text(translateUi('保存在当前设备。长按记录可选择删除。', context)),
         ),
         Divider(),
+        ListTile(
+          key: const ValueKey('github-repository'),
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.code),
+          title: Text(translateUi('GitHub 仓库', context)),
+          subtitle: const Text(repositoryUrl),
+          trailing: const Icon(Icons.open_in_new),
+          onTap: () async {
+            try {
+              if (await launchUrl(
+                Uri.parse(repositoryUrl),
+                mode: LaunchMode.externalApplication,
+                webOnlyWindowName: kIsWeb ? '_self' : null,
+              )) {
+                return;
+              }
+            } catch (_) {
+              // Show a recoverable message if no browser can open the link.
+            }
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(translateUi('无法打开链接，请稍后重试。', context))),
+              );
+            }
+          },
+        ),
         SizedBox(height: 16),
         Text(translateUi('卡牌提供思考的视角，选择始终由你自己做出。', context)),
       ],
