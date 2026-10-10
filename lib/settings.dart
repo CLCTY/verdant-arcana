@@ -1,7 +1,7 @@
 import 'localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'repository_link.dart';
 import 'ai.dart';
 
 const repositoryUrl = 'https://github.com/CLCTY/verdant-arcana';
@@ -105,11 +105,7 @@ class SettingsPage extends StatelessWidget {
           trailing: const Icon(Icons.open_in_new),
           onTap: () async {
             try {
-              if (await launchUrl(
-                Uri.parse(repositoryUrl),
-                mode: LaunchMode.externalApplication,
-                webOnlyWindowName: kIsWeb ? '_self' : null,
-              )) {
+              if (await openRepository(repositoryUrl)) {
                 return;
               }
             } catch (_) {
