@@ -43,6 +43,8 @@ The implementation follows the [DeepSeek documentation](https://api-docs.deepsee
 
 Native builds use system-backed secure storage for API keys. Web preview keys remain in memory and disappear on refresh. Provider credentials are stored separately. AI requests contain the current question, spread positions, card names and orientations; they do not include journal reflections. Errors do not display raw provider responses or credentials.
 
+The local preview server (`node tool/preview.cjs`) provides a same-origin AI relay because official endpoints may reject browser CORS preflight. It binds only to 127.0.0.1, accepts same-origin JSON requests, forwards only to the fixed official DeepSeek and OpenCode Go endpoints, and never logs or persists credentials. Native builds continue connecting directly. Static hosting still needs provider CORS support or a trusted backend. The relay does not override provider permissions, balance or usage policies, and never automatically retries generation requests. Run `node --test tool/preview.test.cjs` to test the relay; restart the server after changes.
+
 Live authentication and billing have not been tested with real API keys. Mock HTTP tests cover request formats, response parsing, error handling and credential isolation. Browser requests may encounter provider CORS restrictions; no proxy is supplied to bypass them.
 
 ## Run locally

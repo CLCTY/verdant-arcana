@@ -88,8 +88,32 @@ class AiException implements Exception {
 }
 
 class AiService {
-  AiService({http.Client? client}) : client = client ?? http.Client();
+  AiService({http.Client? client, Uri? webOrigin})
+    : client = client ?? http.Client(),
+      webOrigin = webOrigin ?? (kIsWeb ? Uri.base : null);
   final http.Client client;
+  final Uri? webOrigin;
+  Future<Uri> requestEndpoint(AiProvider provider) async {
+    final origin = webOrigin;
+    // Only our loopback preview advertises a relay. Hosted builds stay direct.
+    if (origin != null &&
+        origin.scheme == 'http' &&
+        (origin.host == '127.0.0.1' || origin.host == 'localhost')) {
+      try {
+        final response = await client
+            .get(origin.resolve('/api/ai/status'))
+            .timeout(const Duration(seconds: 3));
+        if (response.statusCode == 200 &&
+            jsonDecode(response.body)['relay'] == 'verdant-local-v1') {
+          return origin.resolve('/api/ai/${provider.name}');
+        }
+      } catch (_) {
+        // A static Flutter server does not have our relay.
+      }
+    }
+    return Uri.parse(provider.endpoint);
+  }
+
   void close() => client.close();
   Future<String> complete({
     required AiProvider provider,
@@ -101,9 +125,10 @@ class AiService {
   }) async {
     if (key.trim().isEmpty) throw const AiException('请先在设置中填写 API Key。');
     try {
+      final endpoint = await requestEndpoint(provider);
       final response = await client
           .post(
-            Uri.parse(provider.endpoint),
+            endpoint,
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer ${key.trim()}',
